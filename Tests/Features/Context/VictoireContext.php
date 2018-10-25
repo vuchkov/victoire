@@ -3,13 +3,10 @@
 namespace Victoire\Tests\Features\Context;
 
 use Behat\Behat\Hook\Scope\BeforeScenarioScope;
-use Behat\Behat\Tester\Exception\PendingException;
 use Behat\Mink\Element\Element;
 use Behat\Mink\Exception\ResponseTextException;
 use Behat\Symfony2Extension\Context\KernelDictionary;
 use Knp\FriendlyContexts\Context\RawMinkContext;
-use Symfony\Component\Filesystem\Filesystem;
-use Symfony\Component\Finder\Finder;
 use Symfony\Component\Process\PhpExecutableFinder;
 use Symfony\Component\Process\Process;
 
@@ -402,5 +399,4 @@ class VictoireContext extends RawMinkContext
         $process->wait();
         $process->mustRun();
     }
-
 }
