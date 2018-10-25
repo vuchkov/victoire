@@ -37,3 +37,9 @@ services:
             - '%victoire_i18n.available_locales%'
         tags:
             - { name: 'console.command' }
+
+    victoire_sitemap.command.clear:
+        class: Victoire\Bundle\SitemapBundle\Command\ClearCommand
+        parent: victoire_sitemap.command.generate
+        tags:
+            - { name: 'console.command' }
