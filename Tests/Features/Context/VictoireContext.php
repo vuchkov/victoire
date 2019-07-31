@@ -15,6 +15,8 @@ use Behat\Symfony2Extension\Context\KernelDictionary;
 use Behat\Testwork\Hook\Scope\BeforeSuiteScope;
 use Knp\FriendlyContexts\Context\RawMinkContext;
 use Symfony\Component\Finder\Finder;
+use Symfony\Component\Process\PhpExecutableFinder;
+use Symfony\Component\Process\Process;
 
 /**
  * This class gives some usefull methods for Victoire navigation.
@@ -862,5 +864,56 @@ class VictoireContext extends RawMinkContext
         $session = $this->getSession();
 
         return $session->getPage();
+    }
+
+    /**
+     * Run the history reminder command.
+     *
+     * @When /^I run the sitemap generation command$/
+     */
+    public function iRunTheSitemapGenerationCommand()
+    {
+        $process = new Process(null);
+        $process->setWorkingDirectory($this->getContainer()->getParameter('kernel.root_dir').'/..');
+        $process->setCommandLine(self::getPhpBin().' bin/console victoire:sitemap:generate --env=ci');
+        $process->start();
+        $process->wait();
+        $process->mustRun();
+    }
+
+    /**
+     * @Given /^I run the sitemap clear command$/
+     */
+    public function iRunSitemapClearCommandFile()
+    {
+        $process = new Process(null);
+        $process->setWorkingDirectory($this->getContainer()->getParameter('kernel.root_dir').'/..');
+        $process->setCommandLine(self::getPhpBin().' bin/console victoire:sitemap:clear --env=ci');
+        $process->start();
+        $process->wait();
+        $process->mustRun();
+    }
+
+    /**
+     * @Given /^I run the viewreference generation command$/
+     */
+    public function iRunViewReferenceGenerationCommandFile()
+    {
+        $process = new Process(null);
+        $process->setWorkingDirectory($this->getContainer()->getParameter('kernel.root_dir').'/..');
+        $process->setCommandLine(self::getPhpBin().' bin/console victoire:viewReference:generate --env=ci');
+        $process->start();
+        $process->wait();
+        $process->mustRun();
+    }
+
+    protected static function getPhpBin()
+    {
+        $phpFinder = new PhpExecutableFinder();
+        if (false === $php = $phpFinder->find()) {
+            throw new \RuntimeException('Unable to find the PHP executable.');
+        }
+
+        return $php;
     }
 }
